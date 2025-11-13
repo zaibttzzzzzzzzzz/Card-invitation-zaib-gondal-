@@ -1,0 +1,902 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wedding Invitation Card Generator</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Georgia', 'Times New Roman', serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe8e8 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            color: #5d4037;
+        }
+        
+        .creator-banner {
+            background: linear-gradient(45deg, #8b4513, #d4af37);
+            color: white;
+            padding: 12px 25px;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            text-align: center;
+            width: 100%;
+            max-width: 400px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 25px;
+            width: 100%;
+        }
+        
+        .header h1 {
+            font-size: 2.2rem;
+            color: #8b4513;
+            margin-bottom: 8px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            font-weight: 700;
+        }
+        
+        .header p {
+            font-size: 1.1rem;
+            color: #7d5d3b;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 25px;
+            justify-content: center;
+        }
+        
+        .input-section {
+            flex: 1;
+            min-width: 350px;
+            max-width: 450px;
+            background: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            border: 2px solid #e0a96d;
+        }
+        
+        .preview-section {
+            flex: 1;
+            min-width: 350px;
+            max-width: 450px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        h2 {
+            color: #8b4513;
+            margin-bottom: 18px;
+            font-size: 1.6rem;
+            text-align: center;
+            border-bottom: 2px dashed #e0a96d;
+            padding-bottom: 8px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #5d4037;
+            font-size: 1rem;
+        }
+        
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e0a96d;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+            background: #fffdf7;
+        }
+        
+        input:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #8b4513;
+            box-shadow: 0 0 0 3px rgba(139, 69, 19, 0.2);
+        }
+        
+        textarea {
+            height: 90px;
+            resize: vertical;
+        }
+        
+        .checkbox-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 8px;
+        }
+        
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 1rem;
+        }
+        
+        .checkbox-item input {
+            width: auto;
+            transform: scale(1.2);
+        }
+        
+        .frame-section {
+            margin-top: 25px;
+        }
+        
+        .frame-options {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+        
+        .frame-option {
+            width: 90px;
+            height: 90px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: 3px solid transparent;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            background: #f9f5f0;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .frame-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .frame-option.selected {
+            border-color: #8b4513;
+            transform: scale(1.05);
+            box-shadow: 0 8px 16px rgba(139, 69, 19, 0.3);
+        }
+        
+        .frame-label {
+            position: absolute;
+            bottom: 5px;
+            font-size: 0.7rem;
+            color: #5d4037;
+            font-weight: bold;
+        }
+        
+        button {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(to right, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 20px;
+            box-shadow: 0 5px 15px rgba(139, 69, 19, 0.4);
+            letter-spacing: 1px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            background: linear-gradient(to right, #654321, #8b4513);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(139, 69, 19, 0.5);
+        }
+        
+        button:active {
+            transform: translateY(1px);
+        }
+        
+        /* Wedding Card Styles */
+        .invitation-card {
+            width: 100%;
+            max-width: 450px;
+            background: linear-gradient(135deg, #f9f5f0, #f5f0e6);
+            border-radius: 15px;
+            padding: 35px 25px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+            color: #5d4037;
+            min-height: 600px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        /* Frame Styles */
+        .frame-1 {
+            border: 12px solid transparent;
+            border-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="M20,20 L80,20 L80,80 L20,80 Z" fill="none" stroke="%23d4af37" stroke-width="8"/><path d="M25,25 L75,25 L75,75 L25,75 Z" fill="none" stroke="%23d4af37" stroke-width="4"/></svg>') 30 round;
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
+        }
+        
+        .frame-2 {
+            border: 15px double #8b4513;
+            box-shadow: 0 0 25px rgba(139, 69, 19, 0.3);
+        }
+        
+        .frame-3 {
+            border: 10px solid transparent;
+            border-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><path d="M10,50 Q50,10 90,50 Q50,90 10,50" fill="none" stroke="%23c0c0c0" stroke-width="8"/></svg>') 30 round;
+            box-shadow: 0 0 20px rgba(192, 192, 192, 0.5);
+        }
+        
+        .frame-4 {
+            border: 12px groove #800080;
+            box-shadow: 0 0 20px rgba(128, 0, 128, 0.3);
+        }
+        
+        .frame-5 {
+            border: 15px ridge #2e8b57;
+            box-shadow: 0 0 25px rgba(46, 139, 87, 0.3);
+        }
+        
+        .frame-6 {
+            border: 10px outset #ff69b4;
+            box-shadow: 0 0 20px rgba(255, 105, 180, 0.3);
+        }
+        
+        /* Decorative Elements */
+        .corner-decoration {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            opacity: 0.7;
+        }
+        
+        .corner-tl {
+            top: 10px;
+            left: 10px;
+            border-top: 3px solid #d4af37;
+            border-left: 3px solid #d4af37;
+        }
+        
+        .corner-tr {
+            top: 10px;
+            right: 10px;
+            border-top: 3px solid #d4af37;
+            border-right: 3px solid #d4af37;
+        }
+        
+        .corner-bl {
+            bottom: 10px;
+            left: 10px;
+            border-bottom: 3px solid #d4af37;
+            border-left: 3px solid #d4af37;
+        }
+        
+        .corner-br {
+            bottom: 10px;
+            right: 10px;
+            border-bottom: 3px solid #d4af37;
+            border-right: 3px solid #d4af37;
+        }
+        
+        .floral-decoration {
+            position: absolute;
+            font-size: 24px;
+            opacity: 0.3;
+        }
+        
+        .floral-1 { top: 15px; left: 15px; transform: rotate(-15deg); }
+        .floral-2 { top: 15px; right: 15px; transform: rotate(15deg); }
+        .floral-3 { bottom: 15px; left: 15px; transform: rotate(15deg); }
+        .floral-4 { bottom: 15px; right: 15px; transform: rotate(-15deg); }
+        
+        .horse-decoration {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 28px;
+            opacity: 0.2;
+        }
+        
+        .card-header {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+        }
+        
+        .card-title {
+            font-size: 2rem;
+            font-weight: bold;
+            margin-bottom: 12px;
+            letter-spacing: 2px;
+            color: #8b4513;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+        }
+        
+        .card-subtitle {
+            font-size: 1.1rem;
+            margin-bottom: 8px;
+            font-style: italic;
+            color: #7d5d3b;
+        }
+        
+        .card-body {
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 2;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        
+        .bride-father {
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin-bottom: 6px;
+            color: #5d4037;
+        }
+        
+        .address {
+            font-size: 1rem;
+            margin-bottom: 20px;
+            font-style: italic;
+            color: #7d5d3b;
+        }
+        
+        .events {
+            display: flex;
+            justify-content: space-around;
+            margin: 20px 0;
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: #8b4513;
+        }
+        
+        .invite-details {
+            margin: 20px 0;
+            text-align: left;
+            padding: 15px;
+            border-top: 1px dashed #d4af37;
+            border-bottom: 1px dashed #d4af37;
+            background: rgba(212, 175, 55, 0.1);
+            border-radius: 8px;
+        }
+        
+        .invite-type {
+            display: flex;
+            gap: 20px;
+            margin-top: 12px;
+            font-size: 1rem;
+        }
+        
+        .date-time {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 12px;
+            font-size: 1rem;
+        }
+        
+        .invited-name {
+            font-weight: bold;
+            font-size: 1.1rem;
+            color: #8b4513;
+        }
+        
+        .card-footer {
+            margin-top: 15px;
+            font-style: italic;
+            color: #7d5d3b;
+            font-size: 0.9rem;
+            position: relative;
+            z-index: 2;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+            
+            .input-section, .preview-section {
+                width: 100%;
+                max-width: 100%;
+            }
+            
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .card-title {
+                font-size: 1.7rem;
+            }
+            
+            .creator-banner {
+                font-size: 1.3rem;
+                padding: 10px 20px;
+            }
+            
+            .frame-options {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+        
+        .instructions {
+            margin-top: 25px;
+            text-align: center;
+            font-size: 1rem;
+            color: #7d5d3b;
+            max-width: 800px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.7);
+            border-radius: 8px;
+        }
+        
+        /* Output Page Styles */
+        .output-page {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #fff5e6 0%, #ffe8e8 100%);
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+        }
+        
+        .output-header {
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        
+        .output-header h1 {
+            font-size: 2.2rem;
+            color: #8b4513;
+            margin-bottom: 12px;
+        }
+        
+        .output-header p {
+            font-size: 1.1rem;
+            color: #7d5d3b;
+        }
+        
+        .output-card-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 30px;
+        }
+        
+        .output-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .action-btn {
+            padding: 12px 25px;
+            background: linear-gradient(to right, #8b4513, #a0522d);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .action-btn:hover {
+            background: linear-gradient(to right, #654321, #8b4513);
+            transform: translateY(-3px);
+        }
+        
+        .back-btn {
+            background: linear-gradient(to right, #6c757d, #868e96);
+        }
+        
+        .back-btn:hover {
+            background: linear-gradient(to right, #5a6268, #727b84);
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Page -->
+    <div id="mainPage">
+        <div class="creator-banner">
+            Creating by Zaib Gondal
+        </div>
+        
+        <div class="header">
+            <h1>WEDDING INVITATION CARD GENERATOR</h1>
+            <p>Design your perfect wedding invitation with beautiful frames</p>
+        </div>
+        
+        <div class="container">
+            <div class="input-section">
+                <h2>Design Your Invitation</h2>
+                
+                <div class="form-group">
+                    <label for="description"><i class="fas fa-pen"></i> Description</label>
+                    <textarea id="description">You are cordially invited to the Wedding Ceremony of the Daughters of</textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label for="brideFather"><i class="fas fa-user"></i> Bride's Father Name</label>
+                    <input type="text" id="brideFather" value="Mr. Abid Husain">
+                </div>
+                
+                <div class="form-group">
+                    <label for="address"><i class="fas fa-map-marker-alt"></i> Address</label>
+                    <input type="text" id="address" value="Sukhe Ki Mandi">
+                </div>
+                
+                <div class="form-group">
+                    <label for="invitedName"><i class="fas fa-user-friends"></i> Invited Person Name</label>
+                    <input type="text" id="invitedName" placeholder="Enter invited person name">
+                </div>
+                
+                <div class="form-group">
+                    <label for="events"><i class="fas fa-calendar-alt"></i> Events (Separate with |)</label>
+                    <input type="text" id="events" value="MEHNDI | BARAT | WALIMA">
+                </div>
+                
+                <div class="form-group">
+                    <label><i class="fas fa-users"></i> Invitation Type</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="single" checked>
+                            <label for="single">Single</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="family" checked>
+                            <label for="family">Family</label>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="date"><i class="far fa-calendar"></i> Date</label>
+                    <input type="text" id="date" placeholder="e.g., 15th December, 2023">
+                </div>
+                
+                <div class="form-group">
+                    <label for="time"><i class="far fa-clock"></i> Time</label>
+                    <input type="text" id="time" placeholder="e.g., 6:00 PM onwards">
+                </div>
+                
+                <div class="frame-section">
+                    <label><i class="fas fa-border-style"></i> Select Frame Style</label>
+                    <div class="frame-options">
+                        <div class="frame-option selected" data-frame="frame-1">
+                            🏵️
+                            <div class="frame-label">Golden</div>
+                        </div>
+                        <div class="frame-option" data-frame="frame-2">
+                            🟤
+                            <div class="frame-label">Classic</div>
+                        </div>
+                        <div class="frame-option" data-frame="frame-3">
+                            💎
+                            <div class="frame-label">Silver</div>
+                        </div>
+                        <div class="frame-option" data-frame="frame-4">
+                            🟣
+                            <div class="frame-label">Royal</div>
+                        </div>
+                        <div class="frame-option" data-frame="frame-5">
+                            🍃
+                            <div class="frame-label">Elegant</div>
+                        </div>
+                        <div class="frame-option" data-frame="frame-6">
+                            💖
+                            <div class="frame-label">Romantic</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button id="generateBtn">
+                    <i class="fas fa-gift"></i> Generate Wedding Card
+                </button>
+            </div>
+            
+            <div class="preview-section">
+                <div class="invitation-card frame-1" id="weddingCard">
+                    <div class="corner-decoration corner-tl"></div>
+                    <div class="corner-decoration corner-tr"></div>
+                    <div class="corner-decoration corner-bl"></div>
+                    <div class="corner-decoration corner-br"></div>
+                    
+                    <div class="floral-decoration floral-1">🌸</div>
+                    <div class="floral-decoration floral-2">🌸</div>
+    <div class="floral-decoration floral-2">🌸</div>
+                    <div class="floral-decoration floral-3">🌸</div>
+                    <div class="floral-decoration floral-4">🌸</div>
+                    
+                    <div class="horse-decoration">🐎</div>
+                    
+                    <div class="card-header">
+                        <div class="card-title">WEDDING INVITATION</div>
+                        <div class="card-subtitle" id="cardDescription">You are cordially invited to the Wedding Ceremony of the Daughters of</div>
+                    </div>
+                    
+                    <div class="card-body">
+                        <div class="bride-father" id="cardBrideFather">Mr. Abid Husain</div>
+                        <div class="address" id="cardAddress">(Sukhe Ki Mandi)</div>
+                        
+                        <div class="events" id="cardEvents">
+                            <span>MEHNDI</span>
+                            <span>BARAT</span>
+                            <span>WALIMA</span>
+                        </div>
+                        
+                        <div class="invite-details">
+                            <div>Invited: <span class="invited-name" id="cardInvitedName">______</span></div>
+                            <div class="invite-type">
+                                <span id="cardSingle">☑ Single</span>
+                                <span id="cardFamily">☑ Family</span>
+                            </div>
+                            
+                            <div class="date-time">
+                                <span>Date: <span id="cardDate">______</span></span>
+                                <span>Time: <span id="cardTime">______</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card-footer">
+                        With warm regards from the family
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="instructions">
+            <p><strong>Instructions:</strong> Fill in the details, select your favorite frame, and generate your beautiful wedding invitation!</p>
+        </div>
+    </div>
+
+    <!-- Output Page -->
+    <div class="output-page" id="outputPage">
+        <div class="creator-banner">
+            Creating by Zaib Gondal
+        </div>
+        
+        <div class="output-header">
+            <h1>Your Wedding Invitation Card</h1>
+            <p>Your beautiful custom wedding card is ready!</p>
+        </div>
+        
+        <div class="output-card-container">
+            <div class="invitation-card frame-1" id="finalCard">
+                <div class="corner-decoration corner-tl"></div>
+                <div class="corner-decoration corner-tr"></div>
+                <div class="corner-decoration corner-bl"></div>
+                <div class="corner-decoration corner-br"></div>
+                
+                <div class="floral-decoration floral-1">🌸</div>
+                <div class="floral-decoration floral-2">🌸</div>
+                <div class="floral-decoration floral-3">🌸</div>
+                <div class="floral-decoration floral-4">🌸</div>
+                
+                <div class="horse-decoration">🐎</div>
+                
+                <div class="card-header">
+                    <div class="card-title">WEDDING INVITATION</div>
+                    <div class="card-subtitle" id="finalDescription">You are cordially invited to the Wedding Ceremony of the Daughters of</div>
+                </div>
+                
+                <div class="card-body">
+                    <div class="bride-father" id="finalBrideFather">Mr. Abid Husain</div>
+                    <div class="address" id="finalAddress">(Sukhe Ki Mandi)</div>
+                    
+                    <div class="events" id="finalEvents">
+                        <span>MEHNDI</span>
+                        <span>BARAT</span>
+                        <span>WALIMA</span>
+                    </div>
+                    
+                    <div class="invite-details">
+                        <div>Invited: <span class="invited-name" id="finalInvitedName">______</span></div>
+                        <div class="invite-type">
+                            <span id="finalSingle">☑ Single</span>
+                            <span id="finalFamily">☑ Family</span>
+                        </div>
+                        
+                        <div class="date-time">
+                            <span>Date: <span id="finalDate">______</span></span>
+                            <span>Time: <span id="finalTime">______</span></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="card-footer">
+                    With warm regards from the family
+                </div>
+            </div>
+        </div>
+        
+        <div class="output-actions">
+            <button class="action-btn" id="printBtn">
+                <i class="fas fa-print"></i> Print Card
+            </button>
+            <button class="action-btn back-btn" id="backBtn">
+                <i class="fas fa-arrow-left"></i> Back to Editor
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generateBtn');
+            const backBtn = document.getElementById('backBtn');
+            const printBtn = document.getElementById('printBtn');
+            const frameOptions = document.querySelectorAll('.frame-option');
+            const mainPage = document.getElementById('mainPage');
+            const outputPage = document.getElementById('outputPage');
+            
+            let selectedFrame = 'frame-1'; // Default frame
+            
+            // Frame selection
+            frameOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    frameOptions.forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    selectedFrame = this.getAttribute('data-frame');
+                    updateCardFrame();
+                });
+            });
+            
+            // Generate card and show output page
+            generateBtn.addEventListener('click', function() {
+                updateCardContent();
+                updateCardFrame();
+                updateFinalCard();
+                
+                // Switch to output page
+                mainPage.style.display = 'none';
+                outputPage.style.display = 'flex';
+            });
+            
+            // Back to main page
+            backBtn.addEventListener('click', function() {
+                outputPage.style.display = 'none';
+                mainPage.style.display = 'flex';
+            });
+            
+            // Print card
+            printBtn.addEventListener('click', function() {
+                window.print();
+            });
+            
+            function updateCardContent() {
+                document.getElementById('cardDescription').textContent = 
+                    document.getElementById('description').value;
+                
+                document.getElementById('cardBrideFather').textContent = 
+                    document.getElementById('brideFather').value;
+                
+                document.getElementById('cardAddress').textContent = 
+                    `(${document.getElementById('address').value})`;
+                
+                document.getElementById('cardInvitedName').textContent = 
+                    document.getElementById('invitedName').value || '______';
+                
+                // Update events
+                const eventsText = document.getElementById('events').value;
+                const eventsArray = eventsText.split('|').map(event => event.trim());
+                const eventsContainer = document.getElementById('cardEvents');
+                
+                eventsContainer.innerHTML = '';
+                eventsArray.forEach(event => {
+                    const span = document.createElement('span');
+                    span.textContent = event;
+                    eventsContainer.appendChild(span);
+                });
+                
+                // Update invitation type
+                document.getElementById('cardSingle').textContent = 
+                    document.getElementById('single').checked ? '☑ Single' : '☐ Single';
+                
+                document.getElementById('cardFamily').textContent = 
+                    document.getElementById('family').checked ? '☑ Family' : '☐ Family';
+                
+                // Update date and time
+                document.getElementById('cardDate').textContent = 
+                    document.getElementById('date').value || '______';
+                
+                document.getElementById('cardTime').textContent = 
+                    document.getElementById('time').value || '______';
+            }
+            
+            function updateFinalCard() {
+                document.getElementById('finalDescription').textContent = 
+                    document.getElementById('description').value;
+                
+                document.getElementById('finalBrideFather').textContent = 
+                    document.getElementById('brideFather').value;
+                
+                document.getElementById('finalAddress').textContent = 
+                    `(${document.getElementById('address').value})`;
+                
+                document.getElementById('finalInvitedName').textContent = 
+                    document.getElementById('invitedName').value || '______';
+                
+                // Update events
+                const eventsText = document.getElementById('events').value;
+                const eventsArray = eventsText.split('|').map(event => event.trim());
+                const eventsContainer = document.getElementById('finalEvents');
+                
+                eventsContainer.innerHTML = '';
+                eventsArray.forEach(event => {
+                    const span = document.createElement('span');
+                    span.textContent = event;
+                    eventsContainer.appendChild(span);
+                });
+                
+                // Update invitation type
+                document.getElementById('finalSingle').textContent = 
+                    document.getElementById('single').checked ? '☑ Single' : '☐ Single';
+                
+                document.getElementById('finalFamily').textContent = 
+                    document.getElementById('family').checked ? '☑ Family' : '☐ Family';
+                
+                // Update date and time
+                document.getElementById('finalDate').textContent = 
+                    document.getElementById('date').value || '______';
+                
+                document.getElementById('finalTime').textContent = 
+                    document.getElementById('time').value || '______';
+                
+                // Update frame
+                const finalCard = document.getElementById('finalCard');
+                finalCard.className = 'invitation-card ' + selectedFrame;
+            }
+            
+            function updateCardFrame() {
+                const card = document.getElementById('weddingCard');
+                card.className = 'invitation-card ' + selectedFrame;
+            }
+            
+            // Initialize with default values
+            updateCardContent();
+            updateCardFrame();
+        });
+    </script>
+</body>
+</html>
